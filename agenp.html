@@ -3,19 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riwayat Agen Pulsa</title>
-    <!-- Memuat Tailwind CSS dari CDN dengan plugin Forms -->
+    <title>Riwayat Transaksi - Agen Pulsa</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
     <style>
-        /* Menambahkan font yang lebih baik untuk tampilan */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-        }
+        body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
 <body class="bg-gray-100">
-
     <div class="flex h-screen bg-gray-200">
         <!-- Sidebar -->
         <aside id="sidebar" class="fixed inset-y-0 left-0 z-30 w-64 bg-gray-800 text-white transform -translate-x-full transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:flex-shrink-0">
@@ -41,7 +36,7 @@
                     </button>
                     <!-- Submenu -->
                     <div id="sales-submenu" class="overflow-hidden max-h-0 bg-gray-700 transition-all duration-500 ease-in-out">
-                        <a href="pulsa.html" class="block px-4 py-3 pl-12 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">Pulsa</a>
+                        <a href="pulsa.html" class="block px-4 py-3 pl-12 text-sm bg-gray-700 text-white">Pulsa</a>
                         <a href="akrab.html" class="block px-4 py-3 pl-12 text-sm text-gray-300 hover:bg-gray-600 hover:text-white">Paket Akrab</a>
                     </div>
                 </div>
@@ -61,11 +56,17 @@
                     Riwayat Transaksi
                 </a>
 
-                <a href="keuangan.html" class="flex items-center px-4 py-3 bg-gray-700 text-white transition-colors duration-200">
+                <a href="keuangan.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
                     <svg class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v.01M12 6v-1h4v1m-4 0H8m11 11v-1a2 2 0 00-2-2H7a2 2 0 00-2 2v1m14 0v1a2 2 0 01-2 2H7a2 2 0 01-2-2v-1m14 0h1v-1a2 2 0 00-2-2h-1.333a2 2 0 00-1.334 2.25V17m0 0v1a2 2 0 01-2 2H7a2 2 0 01-2-2v-1"/>
                     </svg>
                     Keuangan
+                </a>
+                <a href="pengeluaran.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+                    <svg class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l6-6m-5.5 5.5a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                    </svg>
+                    <span>Pengeluaran</span>
                 </a>
                 <a href="index.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
                     <svg class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -76,39 +77,46 @@
             </nav>
         </aside>
 
-        <!-- Konten Utama -->
+
+
+        <!-- Main Content -->
         <div class="flex-1 flex flex-col overflow-hidden">
-            <!-- Header Konten -->
+            <!-- Header -->
             <header class="flex justify-between items-center p-4 bg-white border-b">
                 <div class="flex items-center">
                     <button id="menu-btn" class="text-gray-500 focus:outline-none md:hidden">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                        </svg>
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
                     </button>
-                    <h1 id="header-title" class="text-xl font-semibold ml-2">Riwayat Transaksi Agen Pulsa</h1>
+                    <h1 id="header-title" class="text-xl font-semibold ml-2">Riwayat Transaksi - Agen Pulsa</h1>
                 </div>
-                <div></div>
+                 <a href="keuangan.html" class="text-blue-600 hover:text-blue-800 text-sm font-medium">← Kembali ke Keuangan</a>
             </header>
 
-            <!-- Area Konten -->
+            <!-- Content Area -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
                 <div class="container mx-auto">
+                    <!-- Balance Display -->
+                    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                        <h2 class="text-lg font-semibold text-gray-700">Saldo Akhir Agen Pulsa</h2>
+                        <p id="final-balance" class="text-3xl font-bold text-gray-900 mt-2">Memuat...</p>
+                    </div>
+
+                    <!-- History Table -->
                     <div class="bg-white p-8 rounded-lg shadow-md w-full mx-auto">
-                        <h2 class="text-xl font-semibold mb-4">Riwayat Transaksi Saldo Agen Pulsa</h2>
+                        <h2 class="text-xl font-semibold mb-4">Detail Riwayat</h2>
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID Transaksi</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jenis</th>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pemasukan</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pengeluaran</th>
+                                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Pemasukan</th>
+                                        <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Pengeluaran</th>
                                     </tr>
                                 </thead>
                                 <tbody id="history-table-body" class="bg-white divide-y divide-gray-200">
-                                    <!-- Data akan diisi oleh JavaScript -->
+                                    <!-- Rows will be inserted here by JS -->
                                 </tbody>
                             </table>
                         </div>
@@ -122,172 +130,133 @@
         // !! PENTING: Ganti dengan URL Web App dari Google Apps Script Anda !!
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx59LDYtuFqRh6P0a0xtd3usgDpFxXktJbS_jHzbZiai0tqsm3zTIkJSOSFTY1BtfCeqw/exec';
 
-        // Helper untuk mengirim data ke Google Script
-        async function sendDataToSheet(action, payload, sheetName) {
-            const response = await fetch(SCRIPT_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action, payload, sheetName }) });
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-            return await response.json();
-        }
+        // ===================================================================================
+        // !! UBAH VARIABEL INI SESUAI HALAMANNYA !!
+        // Untuk dana.html, ganti menjadi "DANA"
+        // Untuk gopay.html, ganti menjadi "GoPay", dst.
+        const BALANCE_NAME = "Agen Pulsa";
+        // ===================================================================================
 
         document.addEventListener('DOMContentLoaded', function () {
             const menuBtn = document.getElementById('menu-btn');
             const sidebar = document.getElementById('sidebar');
-            const salesMenuBtn = document.getElementById('sales-menu-btn');
-            const salesSubmenu = document.getElementById('sales-submenu');
-            const salesArrow = document.getElementById('sales-arrow');
+            menuBtn.addEventListener('click', () => sidebar.classList.toggle('-translate-x-full'));
 
-            const tableBody = document.getElementById('history-table-body');
+            const formatToRupiahDisplay = (number) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
+            async function sendDataToSheet(action, payload, sheetName) {
+                const response = await fetch(SCRIPT_URL, { method: 'POST', mode: 'cors', body: JSON.stringify({ action, payload, sheetName }) });
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return await response.json();
+            }
 
-            // 1. Fungsi untuk toggle sidebar mobile
-            menuBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('-translate-x-full');
-            });
+            async function loadAndDisplayHistory() {
+                const tableBody = document.getElementById('history-table-body');
+                tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4">Memuat data riwayat...</td></tr>`;
 
-            // 2. Fungsi untuk dropdown menu "Input Penjualan"
-            salesMenuBtn.addEventListener('click', () => {
-                salesArrow.classList.toggle('rotate-180');
-                if (salesSubmenu.style.maxHeight) {
-                    salesSubmenu.style.maxHeight = null;
-                } else {
-                    salesSubmenu.style.maxHeight = salesSubmenu.scrollHeight + "px";
-                }
-            });
+                try {
+                    await loadInitialData();
 
-            // 3. Buka dropdown menu "Input Penjualan" secara default
-            salesArrow.classList.add('rotate-180');
-            salesSubmenu.style.maxHeight = salesSubmenu.scrollHeight + "px";
+                    const transaksiPulsa = JSON.parse(localStorage.getItem('transaksiPulsa')) || [];
+                    const pelangganAkrab = JSON.parse(localStorage.getItem('pelangganAkrab')) || [];
+                    const dataTopup = JSON.parse(localStorage.getItem('dataTopup')) || [];
 
-            // 4. Fungsi untuk memuat dan menampilkan riwayat transaksi Agen Pulsa
-            function loadAgenPulsaHistory() {
-                tableBody.innerHTML = ''; // Kosongkan tabel
+                    let combinedHistory = [];
+                    let finalBalance = 0;
 
-                const transaksiPulsa = JSON.parse(localStorage.getItem('transaksiPulsa')) || [];
-                const pelangganAkrab = JSON.parse(localStorage.getItem('pelangganAkrab')) || [];
-                let combinedHistory = [];
-
-                // --- PENGELUARAN ---
-                // Filter dan format transaksi pulsa (modal dari Agen Pulsa)
-                const pulsaExpenses = transaksiPulsa
-                    .filter(tx => tx.sumber_modal === 'Agen Pulsa')
-                    .map(tx => ({
-                        id: tx.id,
-                        tanggal: new Date(tx.tanggal),
-                        keterangan: `Modal Pulsa ${tx.nama_pulsa} ke ${tx.nomor}`,
-                        pemasukan: 0,
-                        pengeluaran: tx.modal || 0
-                    }));
-
-                // Filter dan format transaksi paket akrab (modal dari Agen Pulsa)
-                const akrabExpenses = pelangganAkrab
-                    .filter(p => p.sumberModal === 'Agen Pulsa')
-                    .map(p => ({
-                        id: p.id,
-                        tanggal: new Date(p.tanggalTambah),
-                        keterangan: `Modal Paket Akrab untuk ${p.nama} (${p.noHp})`,
-                        pemasukan: 0,
-                        pengeluaran: p.modal || 0
-                    }));
-
-                // --- PEMASUKAN ---
-                // Filter dan format transaksi pulsa (pembayaran via Agen Pulsa)
-                const pulsaIncome = transaksiPulsa
-                    .filter(tx => tx.pembayaran === 'Agen Pulsa')
-                    .map(tx => ({
-                        id: tx.id,
-                        tanggal: new Date(tx.tanggal),
-                        keterangan: `Pembayaran Pulsa ${tx.nama_pulsa} (${tx.nomor})`,
-                        pemasukan: tx.harga || 0,
-                        pengeluaran: 0
-                    }));
-
-                // Filter dan format transaksi paket akrab (pembayaran via Agen Pulsa)
-                const akrabIncome = pelangganAkrab
-                    .filter(p => p.metodePembayaran === 'Agen Pulsa')
-                    .map(p => ({
-                        id: p.id,
-                        tanggal: new Date(p.tanggalTambah),
-                        keterangan: `Pembayaran Paket Akrab ${p.nama} (${p.noHp})`,
-                        pemasukan: p.harga || 0,
-                        pengeluaran: 0
-                    }));
-
-                // Gabungkan dan urutkan berdasarkan tanggal terbaru
-                combinedHistory = [...pulsaExpenses, ...akrabExpenses, ...pulsaIncome, ...akrabIncome];
-                combinedHistory.sort((a, b) => b.tanggal - a.tanggal);
-
-                // Fungsi helper untuk format Rupiah
-                const formatToRupiah = (number) => {
-                    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
-                };
-
-                if (combinedHistory.length === 0) {
-                    tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4">Tidak ada riwayat transaksi menggunakan Saldo Agen Pulsa.</td></tr>`;
-                    return;
-                }
-
-                // Tampilkan data ke tabel
-                combinedHistory.forEach(item => {
-                    const row = document.createElement('tr');
-                    const tanggalFormatted = item.tanggal.toLocaleString('id-ID', {
-                        day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                    transaksiPulsa.forEach(tx => {
+                        const modal = tx.modal || 0;
+                        const harga = tx.harga || 0;
+                        if (tx.sumber_modal === BALANCE_NAME) {
+                            finalBalance -= modal;
+                            combinedHistory.push({ tanggal: new Date(tx.tanggal), jenis: 'Pulsa', keterangan: `Modal untuk ${tx.nama_pulsa} (${tx.nomor})`, pemasukan: 0, pengeluaran: modal });
+                        }
+                        if (tx.pembayaran === BALANCE_NAME) {
+                            finalBalance += harga;
+                            combinedHistory.push({ tanggal: new Date(tx.tanggal), jenis: 'Pulsa', keterangan: `Penjualan ${tx.nama_pulsa} (${tx.nomor})`, pemasukan: harga, pengeluaran: 0 });
+                        }
                     });
 
-                    const pemasukanFormatted = item.pemasukan > 0 ? formatToRupiah(item.pemasukan) : '-';
-                    const pengeluaranFormatted = item.pengeluaran > 0 ? formatToRupiah(item.pengeluaran) : '-';
+                    pelangganAkrab.forEach(p => {
+                        const modal = p.modal || 0;
+                        const harga = p.harga || 0;
+                        if (p.sumberModal === BALANCE_NAME) {
+                            finalBalance -= modal;
+                            combinedHistory.push({ tanggal: new Date(p.tanggalTambah), jenis: 'Paket Akrab', keterangan: `Modal untuk ${p.nama} (${p.noHp})`, pemasukan: 0, pengeluaran: modal });
+                        }
+                        if (p.metodePembayaran === BALANCE_NAME) {
+                            finalBalance += harga;
+                            combinedHistory.push({ tanggal: new Date(p.tanggalTambah), jenis: 'Paket Akrab', keterangan: `Pembayaran dari ${p.nama} (${p.noHp})`, pemasukan: harga, pengeluaran: 0 });
+                        }
+                    });
 
-                    row.innerHTML = `
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.id}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${tanggalFormatted}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.keterangan}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 font-medium">${pemasukanFormatted}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600 font-medium">${pengeluaranFormatted}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            }
+                    dataTopup.forEach(topup => {
+                        const modal = topup.modal || 0;
+                        const biayaAdmin = topup.biaya_admin || 0;
+                        const totalPengeluaran = modal + biayaAdmin;
+                        if (topup.sumber_modal === BALANCE_NAME) {
+                            finalBalance -= totalPengeluaran;
+                            combinedHistory.push({ tanggal: new Date(topup.tanggal), jenis: 'Top Up', keterangan: topup.keterangan || `Top up ke ${topup.tujuan_saldo}`, pemasukan: 0, pengeluaran: totalPengeluaran });
+                        }
+                        if (topup.tujuan_saldo === BALANCE_NAME) {
+                            finalBalance += modal;
+                            combinedHistory.push({ tanggal: new Date(topup.tanggal), jenis: 'Top Up', keterangan: topup.keterangan || `Top up dari ${topup.sumber_modal}`, pemasukan: modal, pengeluaran: 0 });
+                        }
+                    });
 
-            // 5. Fungsi untuk memuat data awal dari semua sheet yang relevan
-            async function loadInitialData() {
-                try {
-                    // Muat data dari sheet 'pulsa' (jika belum ada)
-                    if (!localStorage.getItem('transaksiPulsa')) {
-                        const resultPulsa = await sendDataToSheet('read', {}, 'pulsa');
-                        if (resultPulsa.status === 'success') {
-                             const normalizedData = resultPulsa.data.map(tx => ({
-                                ...tx, modal: tx.modal || tx.Modal || 0, harga: tx.harga || tx.Harga || 0
-                            }));
-                            localStorage.setItem('transaksiPulsa', JSON.stringify(normalizedData));
-                        } else { console.error('Gagal memuat data pulsa'); }
+                    combinedHistory.sort((a, b) => b.tanggal - a.tanggal);
+
+                    tableBody.innerHTML = '';
+                    if (combinedHistory.length === 0) {
+                        tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4">Tidak ada riwayat transaksi untuk ${BALANCE_NAME}.</td></tr>`;
+                    } else {
+                        combinedHistory.forEach(item => {
+                            const row = document.createElement('tr');
+                            const tanggalFormatted = item.tanggal.toLocaleString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                            row.innerHTML = `
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${tanggalFormatted}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.jenis}</td>
+                                <td class="px-6 py-4 text-sm text-gray-500">${item.keterangan}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 text-right">${item.pemasukan > 0 ? formatToRupiahDisplay(item.pemasukan) : '-'}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600 text-right">${item.pengeluaran > 0 ? formatToRupiahDisplay(item.pengeluaran) : '-'}</td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
                     }
 
-                    // Muat data dari sheet 'paket_akrab' (jika belum ada)
-                    if (!localStorage.getItem('pelangganAkrab')) {
-                        const resultAkrab = await sendDataToSheet('read', {}, 'paket_akrab');
-                        if (resultAkrab.status === 'success') {
-                            const mappedData = resultAkrab.data.map(item => ({
-                                id: item.id, tanggalTambah: item.tanggal_ditambahkan, nama: item.nama, noHp: item.nomor, 
-                                masaAktif: item['masa aktif'], 
-                                modal: item.modal || item.Modal || 0, 
-                                harga: item.harga || item.Harga || 0, 
-                                metodePembayaran: item.metode_pembayaran, sumberModal: item['sumber modal'], akunPengelola: item.link_akun, noEwalletPengelola: item.no_wallet
-                            }));
-                            localStorage.setItem('pelangganAkrab', JSON.stringify(mappedData));
-                        } else { console.error('Gagal memuat data paket_akrab'); }
-                    }
+                    document.getElementById('final-balance').textContent = formatToRupiahDisplay(finalBalance);
 
                 } catch (error) {
-                    console.error('Gagal memuat data awal:', error);
-                    alert('Gagal memuat sebagian data dari server. Data yang ditampilkan mungkin tidak lengkap.');
-                } finally {
-                    // Setelah semua data dimuat (atau gagal), render tabel
-                    loadAgenPulsaHistory();
+                    console.error("Gagal memuat riwayat:", error);
+                    tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-red-500">Gagal memuat data. Coba lagi.</td></tr>`;
+                    document.getElementById('final-balance').textContent = 'Error';
                 }
             }
 
-            // Panggil fungsi-fungsi inisialisasi
-            loadInitialData();
+            async function loadInitialData() {
+                const dataToLoad = [
+                    { key: 'transaksiPulsa', sheet: 'pulsa' },
+                    { key: 'pelangganAkrab', sheet: 'paket_akrab' },
+                    { key: 'dataTopup', sheet: 'topup' }
+                ];
+                for (const item of dataToLoad) {
+                    if (!localStorage.getItem(item.key)) {
+                        try {
+                            const result = await sendDataToSheet('read', {}, item.sheet);
+                            if (result.status === 'success' && Array.isArray(result.data)) {
+                                localStorage.setItem(item.key, JSON.stringify(result.data));
+                            } else {
+                                localStorage.setItem(item.key, JSON.stringify([]));
+                            }
+                        } catch (e) {
+                            console.error(`Gagal memuat data untuk ${item.key}:`, e);
+                            localStorage.setItem(item.key, JSON.stringify([]));
+                        }
+                    }
+                }
+            }
+
+            loadAndDisplayHistory();
         });
     </script>
-
 </body>
 </html>
