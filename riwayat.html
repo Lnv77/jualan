@@ -257,7 +257,7 @@
                         harga_jual: harga,
                         laba: harga - modal
                     };
-                });
+                }).filter(tx => tx.modal !== 0 || tx.harga_jual !== 0);
             }
 
             // Fungsi untuk mengambil data pulsa dari localStorage DAN Google Sheet
@@ -314,7 +314,8 @@
                     modal: Number(p.modal || 0),
                     harga_jual: Number(p.harga || 0),
                     laba: Number(p.harga || 0) - Number(p.modal || 0)
-                }));
+                }))
+                .filter(tx => tx.modal !== 0 || tx.harga_jual !== 0);
             }
 
             // Fungsi untuk mengambil dan menormalkan data Top Up dari localStorage
@@ -331,7 +332,7 @@
                         harga_jual: 0, // Top up bukan penjualan
                         laba: -biayaAdmin // Biaya admin dianggap sebagai kerugian/biaya
                     };
-                });
+                }).filter(tx => tx.modal !== 0 || tx.harga_jual !== 0);
             }
 
             // Fungsi untuk menghitung dan menampilkan summary
