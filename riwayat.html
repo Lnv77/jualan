@@ -336,12 +336,14 @@
 
             // Fungsi untuk menghitung dan menampilkan summary
             function updateSummary(transactions) {
-                const totalTransactions = transactions.length;
-                const totalModal = transactions.reduce((sum, tx) => sum + (tx.modal || 0), 0);
-                const totalPenjualan = transactions.reduce((sum, tx) => sum + (tx.harga_jual || 0), 0);
-                // Hitung laba hanya dari transaksi penjualan (bukan Top Up)
-                const totalLaba = transactions.filter(tx => tx.jenis !== 'Top Up') // Laba dari pengeluaran sudah negatif, jadi akan mengurangi total
-                                              .reduce((sum, tx) => sum + (tx.laba || 0), 0);
+                // Filter transaksi yang bukan 'Top Up' untuk kalkulasi summary.
+                // Ini memastikan top up hanya ditampilkan di daftar, tapi tidak dihitung di total.
+                const salesTransactions = transactions.filter(tx => tx.jenis !== 'Top Up');
+
+                const totalTransactions = salesTransactions.length;
+                const totalModal = salesTransactions.reduce((sum, tx) => sum + (tx.modal || 0), 0);
+                const totalPenjualan = salesTransactions.reduce((sum, tx) => sum + (tx.harga_jual || 0), 0);
+                const totalLaba = salesTransactions.reduce((sum, tx) => sum + (tx.laba || 0), 0);
                 const formatCurrency = (number) => new Intl.NumberFormat('id-ID', { 
                     style: 'currency', 
                     currency: 'IDR', 
