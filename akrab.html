@@ -116,9 +116,10 @@
                                         <label for="tanggal_tambah_akrab" class="block text-sm font-medium text-gray-700">Tanggal Ditambahkan</label>
                                         <input type="datetime-local" id="tanggal_tambah_akrab" name="tanggal_tambah_akrab" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                                     </div>
-                                    <div>
+                                    <div class="relative">
                                         <label for="nama_pelanggan_akrab" class="block text-sm font-medium text-gray-700">Nama Pelanggan</label>
                                         <input type="text" id="nama_pelanggan_akrab" name="nama_pelanggan_akrab" placeholder="John Doe" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                        <div id="suggestions-container-akrab" class="absolute z-10 w-full bg-white border border-gray-300 rounded-md mt-1 hidden shadow-lg max-h-60 overflow-y-auto"></div>
                                     </div>
                                     <div>
                                         <label for="no_hp_akrab" class="block text-sm font-medium text-gray-700">No. HP</label>
@@ -311,6 +312,10 @@
             const formAkrab = document.getElementById('form-akrab');
             const tableBodyAkrab = document.getElementById('table-body-akrab');
             const searchInputAkrab = document.getElementById('search-akrab');
+            
+            // Elemen untuk sugesti nama
+            const namaPelangganInput = document.getElementById('nama_pelanggan_akrab');
+            const suggestionsContainerAkrab = document.getElementById('suggestions-container-akrab');
 
             const tanggalTambahInput = document.getElementById('tanggal_tambah_akrab');
             const masaAktifInput = document.getElementById('masa_aktif_akrab');
@@ -319,6 +324,44 @@
             const editModal = document.getElementById('edit-modal');
             const editForm = document.getElementById('form-edit-akrab');
             const editCancelBtn = document.getElementById('edit-cancel-btn');
+
+            // ++ HELPER FUNCTIONS UNTUK PENCARIAN LEBIH BAIK ++
+
+            // Fungsi Debounce untuk menunda eksekusi fungsi agar tidak berjalan 
+            // pada setiap ketikan, sehingga lebih responsif dan hemat sumber daya.
+            function debounce(func, delay) {
+                let timeout;
+                return function(...args) {
+                    const context = this;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(context, args), delay);
+                };
+            }
+
+            // Fungsi pencarian yang lebih canggih (powerful search)
+            // Mendukung pencarian berdasarkan inisial dan awal kata.
+            function isMatch(query, text) {
+                if (!query) return true;
+                if (!text) return false;
+
+                const lowerQuery = query.toLowerCase();
+                // ++ FIX: Memastikan 'text' diperlakukan sebagai string sebelum memanggil .toLowerCase()
+                // Ini mencegah error jika data (seperti nomor HP) berupa angka, yang menyebabkan script berhenti.
+                const lowerText = String(text).toLowerCase();
+                // 1. Pencocokan substring langsung (paling umum dan cepat)
+                if (lowerText.includes(lowerQuery)) return true;
+
+                // 2. Pencocokan berdasarkan awal setiap kata (e.g., "jo do" -> "John Doe")
+                const queryWords = lowerQuery.split(' ').filter(w => w);
+                const textWords = lowerText.split(' ');
+                if (queryWords.every(qw => textWords.some(tw => tw.startsWith(qw)))) return true;
+
+                // 3. Pencocokan inisial (e.g., "jd" -> "John Doe")
+                const initials = textWords.map(w => w[0]).join('');
+                if (initials.startsWith(lowerQuery.replace(/\s/g, ''))) return true;
+
+                return false;
+            }
 
             // Fungsi untuk mengatur tanggal default saat halaman dimuat
             function setDefaultDates() {
@@ -466,13 +509,13 @@
                 const cardBodyAkrab = document.getElementById('card-body-akrab');
                 cardBodyAkrab.innerHTML = '';
 
-                const lowerCaseQuery = searchQuery.toLowerCase().trim();
                 const filteredPelanggan = pelangganList.filter(p => {
-                    if (!lowerCaseQuery) return true; // Show all if search is empty
-                    const idMatch = p.id && p.id.toString().includes(lowerCaseQuery);
-                    const namaMatch = p.nama && p.nama.toLowerCase().includes(lowerCaseQuery);
-                    const noHpMatch = p.noHp && p.noHp.toLowerCase().includes(lowerCaseQuery);
-                    return idMatch || namaMatch || noHpMatch;
+                    if (!searchQuery.trim()) return true;
+                    // Gunakan fungsi isMatch untuk pencarian nama dan No. HP yang lebih canggih
+                    // Pencarian ID tetap menggunakan 'includes' untuk pencocokan sederhana.
+                    return (p.id && p.id.toString().includes(searchQuery.toLowerCase().trim())) ||
+                           isMatch(searchQuery, p.nama) ||
+                           (p.noHp && isMatch(searchQuery, p.noHp));
                 });
 
                 if (filteredPelanggan.length === 0) {
@@ -630,9 +673,66 @@
                 }
             });
 
-            searchInputAkrab.addEventListener('input', () => {
+            // Terapkan debounce pada input pencarian utama untuk performa lebih baik
+            searchInputAkrab.addEventListener('input', debounce(() => {
                 renderTabelAkrab(searchInputAkrab.value);
+            }, 300));
+
+            // --- START: Logika untuk sugesti nama pelanggan ---
+
+            const handleNamaInput = debounce((e) => {
+                const query = e.target.value;
+                suggestionsContainerAkrab.innerHTML = '';
+
+                if (query.trim().length < 1) {
+                    suggestionsContainerAkrab.classList.add('hidden');
+                    return;
+                }
+
+                const pelangganList = JSON.parse(localStorage.getItem('pelangganAkrab')) || [];
+                const uniqueCustomers = new Map();
+                pelangganList.forEach(p => {
+                    if (p.nama) {
+                        // Gunakan nama (lowercase) sebagai kunci untuk memastikan keunikan
+                        uniqueCustomers.set(p.nama.toLowerCase(), p);
+                    }
+                });
+
+                const filteredData = Array.from(uniqueCustomers.values())
+                    .filter(item => isMatch(query, item.nama) || (item.noHp && isMatch(query, item.noHp)));
+
+                if (filteredData.length > 0) {
+                    filteredData.forEach(item => {
+                        const suggestionItem = document.createElement('div');
+                        suggestionItem.classList.add('p-2', 'hover:bg-gray-100', 'cursor-pointer', 'text-sm');
+                        suggestionItem.textContent = `${item.nama} (${item.noHp || 'No HP kosong'})`;
+                        suggestionItem.dataset.pelanggan = JSON.stringify(item);
+                        suggestionsContainerAkrab.appendChild(suggestionItem);
+                    });
+                    suggestionsContainerAkrab.classList.remove('hidden');
+                } else {
+                    suggestionsContainerAkrab.classList.add('hidden');
+                }
+            }, 250); // Tunda 250ms setelah user berhenti mengetik
+
+            namaPelangganInput.addEventListener('input', handleNamaInput);
+
+            suggestionsContainerAkrab.addEventListener('click', (e) => {
+                if (e.target && e.target.dataset.pelanggan) {
+                    const selectedPelanggan = JSON.parse(e.target.dataset.pelanggan);
+                    namaPelangganInput.value = selectedPelanggan.nama;
+                    document.getElementById('no_hp_akrab').value = selectedPelanggan.noHp;
+                    suggestionsContainerAkrab.classList.add('hidden');
+                }
             });
+
+            document.addEventListener('click', (e) => {
+                if (!namaPelangganInput.contains(e.target) && !suggestionsContainerAkrab.contains(e.target)) {
+                    suggestionsContainerAkrab.classList.add('hidden');
+                }
+            });
+
+            // --- END: Logika untuk sugesti nama pelanggan ---
 
             // 9. Fungsi untuk memuat data dari Google Sheet saat halaman dibuka
             async function loadDataFromSheet() {
