@@ -73,6 +73,12 @@
                     </svg>
                     <span>Pengeluaran</span>
                 </a>
+                <a href="hutang.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+                    <svg class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    <span>Hutang</span>
+                </a>
                 <a href="index.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
                     <svg class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071a10 10 0 0114.142 0M1.394 9.393a15 15 0 0121.212 0"/>
@@ -176,11 +182,16 @@
                                     </div>
                                 </div>
 
-                                <div class="mt-8 flex justify-end">
+                                <div class="mt-8 flex justify-end space-x-3">
+                                    <button type="button" id="cancel-edit-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md hidden">
+                                        Batal
+                                    </button>
                                     <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                         Simpan Data
                                     </button>
                                 </div>
+                                <!-- Hidden input to store ID during edit -->
+                                <input type="hidden" id="edit-id-akrab">
                             </form>
                         </div>
                     </div>
@@ -223,67 +234,6 @@
         </div>
     </div>
 
-    <!-- Modal Edit -->
-    <div id="edit-modal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 hidden">
-        <div class="relative top-10 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
-            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4">Edit Data Pelanggan</h3>
-            <form id="form-edit-akrab">
-                <input type="hidden" id="edit-id">
-                <!-- Data Pelanggan -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label for="edit-tanggal_tambah_akrab" class="block text-sm font-medium text-gray-700">Tanggal Ditambahkan</label>
-                        <input type="datetime-local" id="edit-tanggal_tambah_akrab" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    </div>
-                    <div>
-                        <label for="edit-nama_pelanggan_akrab" class="block text-sm font-medium text-gray-700">Nama Pelanggan</label>
-                        <input type="text" id="edit-nama_pelanggan_akrab" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    </div>
-                    <div>
-                        <label for="edit-no_hp_akrab" class="block text-sm font-medium text-gray-700">No. HP</label>
-                        <input type="tel" id="edit-no_hp_akrab" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    </div>
-                    <div>
-                        <label for="edit-masa_aktif_akrab" class="block text-sm font-medium text-gray-700">Masa Aktif Sampai</label>
-                        <input type="date" id="edit-masa_aktif_akrab" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    </div>
-                    <div>
-                        <label for="edit-modal_akrab" class="block text-sm font-medium text-gray-700">Modal (Rp)</label>
-                        <input type="text" inputmode="numeric" id="edit-modal_akrab" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    </div>
-                    <div>
-                        <label for="edit-harga_jual_akrab" class="block text-sm font-medium text-gray-700">Harga Jual (Rp)</label>
-                        <input type="text" inputmode="numeric" id="edit-harga_jual_akrab" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    </div>
-                    <div>
-                        <label for="edit-metode_pembayaran_akrab" class="block text-sm font-medium text-gray-700">Metode Pembayaran</label>
-                        <select id="edit-metode_pembayaran_akrab" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                            <option>Cash</option> <option>Hutang</option> <option>Agen Pulsa</option> <option>DANA</option> <option>GoPay</option> <option>ShopeePay</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="edit-sumber_modal_akrab" class="block text-sm font-medium text-gray-700">Sumber Modal</label>
-                        <select id="edit-sumber_modal_akrab" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                            <option>Agen Pulsa</option> <option>DANA</option> <option>GoPay</option> <option>ShopeePay</option>
-                        </select>
-                    </div>
-                    <div class="md:col-span-2">
-                        <label for="edit-akun_pengelola_akrab" class="block text-sm font-medium text-gray-700">Link Akun</label>
-                        <input type="text" id="edit-akun_pengelola_akrab" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    </div>
-                    <div class="md:col-span-2">
-                        <label for="edit-no_ewallet_akrab" class="block text-sm font-medium text-gray-700">No. E-Wallet</label>
-                        <input type="tel" id="edit-no_ewallet_akrab" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-                    </div>
-                </div>
-                <div class="mt-6 flex justify-end space-x-3">
-                    <button type="button" id="edit-cancel-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-md">Batal</button>
-                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded-md">Simpan Perubahan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const menuBtn = document.getElementById('menu-btn');
@@ -320,10 +270,13 @@
             const tanggalTambahInput = document.getElementById('tanggal_tambah_akrab');
             const masaAktifInput = document.getElementById('masa_aktif_akrab');
 
-            // Elemen Modal Edit
-            const editModal = document.getElementById('edit-modal');
-            const editForm = document.getElementById('form-edit-akrab');
-            const editCancelBtn = document.getElementById('edit-cancel-btn');
+            // Elemen untuk mode Edit
+            const editIdInput = document.getElementById('edit-id-akrab');
+            const cancelEditBtn = document.getElementById('cancel-edit-btn');
+            const submitBtnAkrab = formAkrab.querySelector('button[type="submit"]');
+            
+            // Variabel global untuk menyimpan data sugesti dari sheet
+            let suggestionDataList = [];
 
             // ++ HELPER FUNCTIONS UNTUK PENCARIAN LEBIH BAIK ++
 
@@ -379,7 +332,7 @@
 
                 // 2. Set "Masa Aktif" 30 hari dari sekarang
                 const futureDate = new Date(now);
-                futureDate.setDate(futureDate.getDate() + 30);
+                futureDate.setDate(futureDate.getDate() + 29); // Diubah menjadi 29 agar total durasi 30 hari (hari pertama dihitung)
                 
                 // Format untuk input date adalah YYYY-MM-DD
                 const futureYear = futureDate.getFullYear();
@@ -400,7 +353,7 @@
                     return;
                 }
                 const startDate = new Date(tanggalTambahInput.value);
-                startDate.setDate(startDate.getDate() + 30);
+                startDate.setDate(startDate.getDate() + 29); // Diubah menjadi 29 agar total durasi 30 hari (hari pertama dihitung)
 
                 const futureYear = startDate.getFullYear();
                 const futureMonth = (startDate.getMonth() + 1).toString().padStart(2, '0');
@@ -428,11 +381,11 @@
             const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx59LDYtuFqRh6P0a0xtd3usgDpFxXktJbS_jHzbZiai0tqsm3zTIkJSOSFTY1BtfCeqw/exec';
 
             // Helper untuk mengirim data ke Google Script
-            async function sendDataToSheet(action, payload) {
+            async function sendDataToSheet(action, payload, sheetName) {
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
                     mode: 'cors',
-                    body: JSON.stringify({ action, payload, sheetName: 'paket_akrab' }) // Menentukan nama sheet
+                    body: JSON.stringify({ action, payload, sheetName: sheetName })
                 });
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
@@ -449,9 +402,12 @@
 
                 const parseRupiah = (value) => parseInt(value.replace(/\D/g, ''), 10) || 0;
 
+                const isUpdate = !!editIdInput.value;
+                const id = isUpdate ? editIdInput.value : String(Math.floor(100000 + Math.random() * 900000));
+
                 // Objek untuk disimpan di localStorage (menggunakan camelCase)
                 const localData = {
-                    id: Math.floor(100000 + Math.random() * 900000),
+                    id: id,
                     tanggalTambah: document.getElementById('tanggal_tambah_akrab').value,
                     nama: document.getElementById('nama_pelanggan_akrab').value,
                     noHp: document.getElementById('no_hp_akrab').value,
@@ -479,28 +435,42 @@
                     no_wallet: localData.noEwalletPengelola
                 };
 
+                const action = isUpdate ? 'update' : 'create';
+
                 try {
-                    const result = await sendDataToSheet('create', gsheetData);
+                    const result = await sendDataToSheet(action, gsheetData, 'paket_akrab');
                     if (result.status === 'success') {
-                        const pelangganList = JSON.parse(localStorage.getItem('pelangganAkrab')) || [];
-                        pelangganList.push(localData); // Simpan data lokal
+                        let pelangganList = JSON.parse(localStorage.getItem('pelangganAkrab')) || [];
+                        if (isUpdate) {
+                            const index = pelangganList.findIndex(p => p.id == id);
+                            if (index !== -1) pelangganList[index] = localData;
+                        } else {
+                            pelangganList.push(localData);
+                        }
                         localStorage.setItem('pelangganAkrab', JSON.stringify(pelangganList));
 
                         renderTabelAkrab();
-                        formAkrab.reset();
-                        setDefaultDates(); // Atur ulang tanggal setelah form di-reset
-                        alert(result.message);
+                        resetFormToCreateMode();
+                        alert(result.message || (isUpdate ? 'Data berhasil diperbarui.' : 'Data berhasil disimpan.'));
                     } else {
                         throw new Error(result.message);
                     }
                 } catch (error) {
                     console.error('Error:', error);
-                    alert('Gagal menyimpan data ke Google Sheets. Error: ' + error.message);
+                    alert(`Gagal ${isUpdate ? 'memperbarui' : 'menyimpan'} data. Error: ${error.message}`);
                 } finally {
                     submitButton.disabled = false;
-                    submitButton.textContent = 'Simpan Data';
+                    // Teks tombol direset oleh resetFormToCreateMode()
                 }
             });
+
+            function resetFormToCreateMode() {
+                formAkrab.reset();
+                editIdInput.value = '';
+                submitBtnAkrab.textContent = 'Simpan Data';
+                cancelEditBtn.classList.add('hidden');
+                setDefaultDates();
+            }
 
             // 6. Fungsi untuk merender data ke tabel
             function renderTabelAkrab(searchQuery = '') {
@@ -588,7 +558,7 @@
                         try {
                             target.textContent = 'Menghapus...';
                             target.disabled = true;
-                            const result = await sendDataToSheet('delete', { id });
+                            const result = await sendDataToSheet('delete', { id }, 'paket_akrab');
                             if (result.status === 'success') {
                                 let updatedList = pelangganList.filter(p => p.id != id);
                                 localStorage.setItem('pelangganAkrab', JSON.stringify(updatedList));
@@ -607,71 +577,27 @@
 
                 // Aksi Edit
                 if (target.classList.contains('js-edit-btn')) {
-                    document.getElementById('edit-id').value = pelanggan.id;
-                    document.getElementById('edit-tanggal_tambah_akrab').value = pelanggan.tanggalTambah;
-                    document.getElementById('edit-nama_pelanggan_akrab').value = pelanggan.nama;
-                    document.getElementById('edit-no_hp_akrab').value = pelanggan.noHp;
-                    document.getElementById('edit-masa_aktif_akrab').value = pelanggan.masaAktif;
-                    document.getElementById('edit-modal_akrab').value = pelanggan.modal.toLocaleString('id-ID');
-                    document.getElementById('edit-harga_jual_akrab').value = pelanggan.harga.toLocaleString('id-ID');
-                    document.getElementById('edit-metode_pembayaran_akrab').value = pelanggan.metodePembayaran;
-                    document.getElementById('edit-sumber_modal_akrab').value = pelanggan.sumberModal;
-                    document.getElementById('edit-akun_pengelola_akrab').value = pelanggan.akunPengelola;
-                    document.getElementById('edit-no_ewallet_akrab').value = pelanggan.noEwalletPengelola;
-                    editModal.classList.remove('hidden');
+                    editIdInput.value = pelanggan.id;
+                    // Format tanggal untuk input datetime-local (YYYY-MM-DDTHH:mm)
+                    // Data dari sheet bisa jadi string ISO penuh, kita potong sesuai format.
+                    document.getElementById('tanggal_tambah_akrab').value = pelanggan.tanggalTambah ? pelanggan.tanggalTambah.slice(0, 16) : '';
+                    document.getElementById('nama_pelanggan_akrab').value = pelanggan.nama;
+                    document.getElementById('no_hp_akrab').value = pelanggan.noHp;
+                    // Format tanggal untuk input date (YYYY-MM-DD)
+                    document.getElementById('masa_aktif_akrab').value = pelanggan.masaAktif ? pelanggan.masaAktif.slice(0, 10) : '';
+                    modalAkrabInput.value = (pelanggan.modal || 0).toLocaleString('id-ID');
+                    hargaAkrabInput.value = (pelanggan.harga || 0).toLocaleString('id-ID');
+                    document.getElementById('metode_pembayaran_akrab').value = pelanggan.metodePembayaran;
+                    document.getElementById('sumber_modal_akrab').value = pelanggan.sumberModal;
+                    document.getElementById('akun_pengelola_akrab').value = pelanggan.akunPengelola;
+                    document.getElementById('no_ewallet_akrab').value = pelanggan.noEwalletPengelola;
+
+                    submitBtnAkrab.textContent = 'Simpan Perubahan';
+                    cancelEditBtn.classList.remove('hidden');
+
+                    formAkrab.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             }
-
-            // 8. Event listener untuk modal edit
-            editCancelBtn.addEventListener('click', () => editModal.classList.add('hidden'));
-            document.getElementById('edit-modal_akrab').addEventListener('input', formatRupiah);
-            document.getElementById('edit-harga_jual_akrab').addEventListener('input', formatRupiah);
-
-            editForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const submitButton = editForm.querySelector('button[type="submit"]');
-                submitButton.disabled = true;
-                submitButton.textContent = 'Menyimpan...';
-
-                const parseRupiah = (value) => parseInt(value.replace(/\D/g, ''), 10) || 0;
-
-                const localData = {
-                    id: document.getElementById('edit-id').value,
-                    tanggalTambah: document.getElementById('edit-tanggal_tambah_akrab').value,
-                    nama: document.getElementById('edit-nama_pelanggan_akrab').value,
-                    noHp: document.getElementById('edit-no_hp_akrab').value,
-                    masaAktif: document.getElementById('edit-masa_aktif_akrab').value,
-                    modal: parseRupiah(document.getElementById('edit-modal_akrab').value),
-                    harga: parseRupiah(document.getElementById('edit-harga_jual_akrab').value),
-                    metodePembayaran: document.getElementById('edit-metode_pembayaran_akrab').value,
-                    sumberModal: document.getElementById('edit-sumber_modal_akrab').value,
-                    akunPengelola: document.getElementById('edit-akun_pengelola_akrab').value,
-                    noEwalletPengelola: document.getElementById('edit-no_ewallet_akrab').value,
-                };
-
-                const gsheetData = { id: localData.id, tanggal_ditambahkan: localData.tanggalTambah, nama: localData.nama, nomor: localData.noHp, 'masa aktif': localData.masaAktif, modal: localData.modal, harga: localData.harga, metode_pembayaran: localData.metodePembayaran, 'sumber modal': localData.sumberModal, link_akun: localData.akunPengelola, no_wallet: localData.noEwalletPengelola };
-
-                try {
-                    const result = await sendDataToSheet('update', gsheetData);
-                    if (result.status === 'success') {
-                        let pelangganList = JSON.parse(localStorage.getItem('pelangganAkrab')) || [];
-                        const index = pelangganList.findIndex(p => p.id == localData.id);
-                        if (index !== -1) pelangganList[index] = localData;
-                        localStorage.setItem('pelangganAkrab', JSON.stringify(pelangganList));
-                        
-                        renderTabelAkrab();
-                        editModal.classList.add('hidden');
-                        alert(result.message);
-                    } else {
-                        throw new Error(result.message);
-                    }
-                } catch (error) {
-                    alert('Gagal memperbarui data: ' + error.message);
-                } finally {
-                    submitButton.disabled = false;
-                    submitButton.textContent = 'Simpan Perubahan';
-                }
-            });
 
             // Terapkan debounce pada input pencarian utama untuk performa lebih baik
             searchInputAkrab.addEventListener('input', debounce(() => {
@@ -689,14 +615,27 @@
                     return;
                 }
 
-                const pelangganList = JSON.parse(localStorage.getItem('pelangganAkrab')) || [];
+                // --- START: Gabungkan data dari master sheet dan data input saat ini ---
                 const uniqueCustomers = new Map();
-                pelangganList.forEach(p => {
+                const pelangganListFromStorage = JSON.parse(localStorage.getItem('pelangganAkrab')) || [];
+
+                // 1. Tambahkan data dari master list (pelanggan_akrab)
+                suggestionDataList.forEach(p => {
                     if (p.nama) {
                         // Gunakan nama (lowercase) sebagai kunci untuk memastikan keunikan
-                        uniqueCustomers.set(p.nama.toLowerCase(), p);
+                        // Simpan objek yang konsisten
+                        uniqueCustomers.set(p.nama.toLowerCase(), { nama: p.nama, noHp: p.noHp });
                     }
                 });
+
+                // 2. Tambahkan data dari input saat ini (paket_akrab)
+                // Ini akan menambahkan pelanggan baru atau menimpa data yang ada, memastikan data terbaru muncul
+                pelangganListFromStorage.forEach(p => {
+                    if (p.nama) {
+                        uniqueCustomers.set(p.nama.toLowerCase(), { nama: p.nama, noHp: p.noHp });
+                    }
+                });
+                // --- END: Gabungkan data ---
 
                 const filteredData = Array.from(uniqueCustomers.values())
                     .filter(item => isMatch(query, item.nama) || (item.noHp && isMatch(query, item.noHp)));
@@ -738,7 +677,7 @@
             async function loadDataFromSheet() {
                 tableBodyAkrab.innerHTML = `<tr><td colspan="7" class="text-center py-4">Memuat data dari server...</td></tr>`;
                 try {
-                    const result = await sendDataToSheet('read', {});
+                    const result = await sendDataToSheet('read', {}, 'paket_akrab');
                     if (result.status === 'success') {
                         // Data dari sheet mungkin memiliki nama kolom yang berbeda, kita perlu memetakannya
                         const mappedData = result.data.map(item => ({
@@ -765,13 +704,40 @@
                 }
             }
 
+            // Fungsi untuk memuat data sugesti dari sheet 'pelanggan_akrab'
+            async function loadSuggestionData() {
+                try {
+                    const result = await sendDataToSheet('read', {}, 'pelanggan_akrab');
+                    if (result.status === 'success' && Array.isArray(result.data)) {
+                        // Petakan data dari sheet ke format yang konsisten
+                        suggestionDataList = result.data.map(item => ({
+                            id: item.id,
+                            nama: item.nama,
+                            noHp: item.nomor // Sesuaikan 'nomor' dengan nama kolom di sheet Anda
+                        }));
+                    } else {
+                        console.error('Gagal memuat data sugesti atau format data salah:', result.message);
+                        suggestionDataList = []; // Kosongkan jika gagal
+                    }
+                } catch (error) {
+                    console.error('Error saat memuat data sugesti dari Sheet:', error);
+                    suggestionDataList = []; // Kosongkan jika terjadi error
+                }
+            }
+
             // Tambahkan event listener untuk memperbarui masa aktif secara dinamis
             tanggalTambahInput.addEventListener('change', updateMasaAktif);
             tableBodyAkrab.addEventListener('click', handleTableActions);
+            cancelEditBtn.addEventListener('click', () => {
+                resetFormToCreateMode();
+                // Scroll to top to show the fresh form
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
             document.getElementById('card-body-akrab').addEventListener('click', handleTableActions);
 
             // Render tabel saat halaman pertama kali dimuat
             loadDataFromSheet();
+            loadSuggestionData(); // Muat data untuk sugesti
             // Panggil fungsi untuk mengisi tanggal otomatis
             setDefaultDates();
         });
