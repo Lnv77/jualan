@@ -73,6 +73,12 @@
                     </svg>
                     <span>Pengeluaran</span>
                 </a>
+                <a href="hutang.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
+                    <svg class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                    <span>Hutang</span>
+                </a>
                 <a href="index.html" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white transition-colors duration-200">
                     <svg class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071a10 10 0 0114.142 0M1.394 9.393a15 15 0 0121.212 0"/>
@@ -163,6 +169,19 @@
                                 <h3 class="text-lg font-semibold text-gray-700 ml-4">Saldo ShopeePay</h3>
                             </div>
                             <p id="saldo-shopeepay" class="text-3xl font-bold text-gray-900 mt-4">Rp 0</p>
+                        </a>
+
+                        <!-- Card Saldo Hutang (Piutang) -->
+                        <a href="hutang.html" class="bg-white p-6 rounded-lg shadow-md flex flex-col hover:shadow-xl transition-shadow duration-200">
+                            <div class="flex items-center">
+                                <div class="bg-red-500 p-3 rounded-full">
+                                    <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-700 ml-4">Saldo Hutang (Piutang)</h3>
+                            </div>
+                            <p id="saldo-hutang" class="text-3xl font-bold text-gray-900 mt-4">Rp 0</p>
                         </a>
 
                     </div>
@@ -311,10 +330,7 @@
                 try {
                     const result = await sendDataToSheet('create', payload, 'topup');
                     if (result.status === 'success') {
-                        const localTopups = JSON.parse(localStorage.getItem('dataTopup')) || [];
-                        localTopups.push(payload);
-                        localStorage.setItem('dataTopup', JSON.stringify(localTopups));
-                        calculateAndDisplayBalances();
+                        loadInitialData(); // Muat ulang semua data untuk mendapatkan saldo terbaru
                         formTopup.reset();
                         topupModal.classList.add('hidden');
                         alert('Top up berhasil disimpan.');
@@ -341,20 +357,13 @@
             const parseRupiah = (value) => parseInt(String(value).replace(/\D/g, ''), 10) || 0;
 
             // 4. Fungsi untuk menghitung dan menampilkan saldo
-            function calculateAndDisplayBalances() {
+            function calculateAndDisplayBalances(transaksiPulsa = [], pelangganAkrab = [], dataTopup = [], dataPengeluaran = []) {
                 // Inisialisasi saldo
                 const balances = {
-                    cash: 0,
-                    agenPulsa: 0,
-                    dana: 0,
-                    gopay: 0,
-                    shopeepay: 0
+                    cash: 0, agenPulsa: 0, dana: 0, gopay: 0, shopeepay: 0, hutang: 0
                 };
 
-                // Ambil data dari localStorage
-                const transaksiPulsa = JSON.parse(localStorage.getItem('transaksiPulsa')) || [];
-                const pelangganAkrab = JSON.parse(localStorage.getItem('pelangganAkrab')) || [];
-                const dataTopup = JSON.parse(localStorage.getItem('dataTopup')) || [];
+                // Data sekarang diterima sebagai argumen, tidak lagi dari localStorage
 
                 // Proses transaksi pulsa
                 transaksiPulsa.forEach(tx => {
@@ -376,6 +385,7 @@
                             case 'DANA': balances.dana += harga; break;
                             case 'GoPay': balances.gopay += harga; break;
                             case 'ShopeePay': balances.shopeepay += harga; break;
+                            case 'Hutang': balances.hutang += harga; break;
                     }
                 });
 
@@ -399,6 +409,7 @@
                             case 'DANA': balances.dana += harga; break;
                             case 'GoPay': balances.gopay += harga; break;
                             case 'ShopeePay': balances.shopeepay += harga; break;
+                            case 'Hutang': balances.hutang += harga; break;
                     }
                 });
 
@@ -415,6 +426,7 @@
                         case 'DANA': balances.dana += modal; break;
                         case 'GoPay': balances.gopay += modal; break;
                         case 'ShopeePay': balances.shopeepay += modal; break;
+                        case 'Hutang': balances.hutang -= modal; break; // Pembayaran hutang mengurangi piutang
                     }
 
                     // Kurangi saldo dari sumber (jika bukan eksternal)
@@ -429,7 +441,6 @@
                 });
 
                 // Proses data pengeluaran (BARU)
-                const dataPengeluaran = JSON.parse(localStorage.getItem('dataPengeluaran')) || [];
                 dataPengeluaran.forEach(expense => {
                     const jumlah = expense.jumlah || 0;
                     switch (expense.sumber_dana) {
@@ -447,83 +458,75 @@
                 document.getElementById('saldo-dana').textContent = formatToRupiahDisplay(balances.dana);
                 document.getElementById('saldo-gopay').textContent = formatToRupiahDisplay(balances.gopay);
                 document.getElementById('saldo-shopeepay').textContent = formatToRupiahDisplay(balances.shopeepay);
+                document.getElementById('saldo-hutang').textContent = formatToRupiahDisplay(balances.hutang);
             }
 
             // 5. Muat data awal
             async function loadInitialData() {
+                // Tampilkan status memuat di semua kartu saldo
+                const balanceElements = {
+                    'saldo-cash': document.getElementById('saldo-cash'),
+                    'saldo-agen-pulsa': document.getElementById('saldo-agen-pulsa'),
+                    'saldo-dana': document.getElementById('saldo-dana'),
+                    'saldo-gopay': document.getElementById('saldo-gopay'),
+                    'saldo-shopeepay': document.getElementById('saldo-shopeepay'),
+                    'saldo-hutang': document.getElementById('saldo-hutang')
+                };
+                Object.values(balanceElements).forEach(el => el.textContent = 'Memuat...');
+
                 try {
-                    // Muat data dari sheet 'pulsa' (jika belum ada)
-                    if (!localStorage.getItem('transaksiPulsa')) {
-                        const resultPulsa = await sendDataToSheet('read', {}, 'pulsa');
-                        if (resultPulsa.status === 'success') {
-                             const normalizedData = resultPulsa.data.map(tx => ({
-                                id: tx.id,
-                                tanggal: tx.tanggal,
-                                nomor: tx.nomor,
-                                nama_pulsa: tx.nama_pulsa,
-                                modal: tx.modal || tx.Modal || 0,
-                                harga: tx.harga || tx.Harga || 0,
-                                sumber_modal: tx.sumber_modal,
-                                pembayaran: tx.pembayaran
-                            }));
-                            localStorage.setItem('transaksiPulsa', JSON.stringify(normalizedData));
-                        } else { console.error('Gagal memuat data pulsa'); }
-                    }
+                    // Selalu ambil data terbaru dari Google Sheets secara paralel
+                    const [resultPulsa, resultAkrab, resultTopup, resultPengeluaran] = await Promise.all([
+                        sendDataToSheet('read', {}, 'pulsa'),
+                        sendDataToSheet('read', {}, 'paket_akrab'),
+                        sendDataToSheet('read', {}, 'topup'),
+                        sendDataToSheet('read', {}, 'pengeluaran')
+                    ]);
 
-                    // Muat data dari sheet 'paket_akrab' (jika belum ada)
-                    if (!localStorage.getItem('pelangganAkrab')) {
-                        const resultAkrab = await sendDataToSheet('read', {}, 'paket_akrab');
-                        if (resultAkrab.status === 'success') {
-                            const mappedData = resultAkrab.data.map(item => ({
-                                id: item.id, tanggalTambah: item.tanggal_ditambahkan, nama: item.nama, noHp: item.nomor, 
-                                masaAktif: item['masa aktif'], 
-                                modal: item.modal || item.Modal || 0, 
-                                harga: item.harga || item.Harga || 0, 
-                                metodePembayaran: item.metode_pembayaran, sumberModal: item['sumber modal'], akunPengelola: item.link_akun, noEwalletPengelola: item.no_wallet
-                            }));
-                            localStorage.setItem('pelangganAkrab', JSON.stringify(mappedData));
-                        } else { console.error('Gagal memuat data paket_akrab'); }
-                    }
+                    // Proses data pulsa
+                    const transaksiPulsa = (resultPulsa.status === 'success' && Array.isArray(resultPulsa.data))
+                        ? resultPulsa.data.map(tx => ({
+                            id: tx.id, tanggal: tx.tanggal, nomor: tx.nomor, nama_pulsa: tx.nama_pulsa,
+                            modal: tx.modal || tx.Modal || 0,
+                            harga: tx.harga || tx.Harga || 0,
+                            sumber_modal: tx.sumber_modal, pembayaran: tx.pembayaran
+                        }))
+                        : [];
 
-                    // Muat data dari sheet 'topup' (jika belum ada)
-                    if (!localStorage.getItem('dataTopup')) {
-                        const resultTopup = await sendDataToSheet('read', {}, 'topup');
-                        if (resultTopup.status === 'success' && Array.isArray(resultTopup.data)) {
-                            const normalizedData = resultTopup.data.map(item => ({
-                                id: item.id,
-                                tanggal: item.tanggal,
-                                sumber_modal: item.sumber_modal,
-                                tujuan_saldo: item.tujuan_saldo,
-                                modal: item.modal || 0,
-                                biaya_admin: item.biaya_admin || 0,
-                                keterangan: item.keterangan,
-                            }));
-                            localStorage.setItem('dataTopup', JSON.stringify(normalizedData));
-                        } else {
-                            console.error('Gagal memuat data topup atau data kosong.');
-                            localStorage.setItem('dataTopup', JSON.stringify([]));
-                        }
-                    }
+                    // Proses data paket akrab
+                    const pelangganAkrab = (resultAkrab.status === 'success' && Array.isArray(resultAkrab.data))
+                        ? resultAkrab.data.map(item => ({
+                            id: item.id, tanggalTambah: item.tanggal_ditambahkan, nama: item.nama, noHp: item.nomor,
+                            masaAktif: item['masa aktif'],
+                            modal: item.modal || item.Modal || 0,
+                            harga: item.harga || item.Harga || 0,
+                            metodePembayaran: item.metode_pembayaran, sumberModal: item['sumber modal'], akunPengelola: item.link_akun, noEwalletPengelola: item.no_wallet
+                        }))
+                        : [];
 
-                    // Muat data dari sheet 'pengeluaran' (jika belum ada) (BARU)
-                    if (!localStorage.getItem('dataPengeluaran')) {
-                        const resultPengeluaran = await sendDataToSheet('read', {}, 'pengeluaran');
-                        if (resultPengeluaran.status === 'success' && Array.isArray(resultPengeluaran.data)) {
-                            // Tidak perlu normalisasi jika kolom sudah sesuai
-                            localStorage.setItem('dataPengeluaran', JSON.stringify(resultPengeluaran.data));
-                        } else {
-                            console.error('Gagal memuat data pengeluaran atau data kosong.');
-                            // Set array kosong agar tidak error saat parsing
-                            localStorage.setItem('dataPengeluaran', JSON.stringify([]));
-                        }
-                    }
+                    // Proses data topup
+                    const dataTopup = (resultTopup.status === 'success' && Array.isArray(resultTopup.data))
+                        ? resultTopup.data.map(item => ({
+                            id: item.id, tanggal: item.tanggal, sumber_modal: item.sumber_modal,
+                            tujuan_saldo: item.tujuan_saldo,
+                            modal: item.modal || 0,
+                            biaya_admin: item.biaya_admin || 0,
+                            keterangan: item.keterangan,
+                        }))
+                        : [];
+
+                    // Proses data pengeluaran
+                    const dataPengeluaran = (resultPengeluaran.status === 'success' && Array.isArray(resultPengeluaran.data))
+                        ? resultPengeluaran.data
+                        : [];
+
+                    // Setelah semua data dimuat, hitung dan tampilkan saldo
+                    calculateAndDisplayBalances(transaksiPulsa, pelangganAkrab, dataTopup, dataPengeluaran);
 
                 } catch (error) {
                     console.error('Gagal memuat data awal:', error);
-                    alert('Gagal memuat sebagian data dari server. Data yang ditampilkan mungkin tidak lengkap.');
-                } finally {
-                    // Setelah semua data dimuat (atau gagal), hitung saldo
-                    calculateAndDisplayBalances();
+                    alert('Gagal memuat data dari server. Saldo yang ditampilkan mungkin tidak akurat. Coba muat ulang halaman.');
+                    Object.values(balanceElements).forEach(el => el.textContent = 'Error');
                 }
             }
 
